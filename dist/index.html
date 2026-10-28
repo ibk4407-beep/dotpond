@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111410"><meta name="description" content="ドットアニメーション壁紙。画像変換と音声連動を端末内で処理。">
+  <title>DOTPOND</title>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="loading" role="status" aria-label="読み込み中"><div class="skeleton top"></div><div class="skeleton orb"></div><div class="skeleton panel"></div><div class="loading-mark">DOTPOND<span></span></div></div>
+  <canvas id="pond" aria-label="ドットアニメーションのプレビュー"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <header class="chrome">
+    <a class="brand" href="./" aria-label="DOTPOND ホーム"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M4 4h5v5H4zm8 0h5v5h-5zm8 0h5v5h-5zM4 12h5v5H4zm8 0h5v5h-5zm8 0h5v5h-5zM4 20h5v5H4zm8 0h5v5h-5z" fill="currentColor"/></svg><span>DOTPOND<span class="brand-dot">.</span></span></a>
+    <div class="header-right"><span class="version">DESKTOP / 01</span><button id="about" class="icon-button glass" aria-label="アプリ情報"><i data-icon="info"></i></button></div>
+  </header>
+  <main id="controls" class="chrome">
+    <section class="inspector glass" aria-labelledby="panel-title">
+      <div class="panel-head"><div><p class="eyebrow">WORKSPACE</p><h1 id="panel-title">背景の設定</h1></div><button id="hide" class="icon-button" aria-label="設定パネルを隠す"><i data-icon="minimize"></i></button></div>
+      <nav class="tabs" aria-label="設定カテゴリ" role="tablist"><button class="tab active" data-tab="scene" aria-selected="true" role="tab" aria-controls="scene-tab" id="scene-label"><i data-icon="grid"></i>シーン</button><button class="tab" data-tab="image" aria-selected="false" role="tab" aria-controls="image-tab" id="image-label"><i data-icon="image"></i>画像</button><button class="tab" data-tab="audio" aria-selected="false" role="tab" aria-controls="audio-tab" id="audio-label"><i data-icon="audio"></i>音声</button></nav>
+      <div id="scene-tab" class="tab-content" role="tabpanel" aria-labelledby="scene-label">
+        <div class="section-label"><span>ライブラリ</span><span class="count">03</span></div>
+        <div class="scene-grid">
+          <button class="scene active" data-scene="pond" aria-pressed="true"><canvas width="150" height="96" data-preview="pond"></canvas><span>鯉の池</span><span class="scene-check">✓</span></button>
+          <button class="scene" data-scene="waves" aria-pressed="false"><canvas width="150" height="96" data-preview="waves"></canvas><span>波紋</span><span class="scene-check">✓</span></button>
+          <button class="scene" data-scene="nebula" aria-pressed="false"><canvas width="150" height="96" data-preview="nebula"></canvas><span>星雲</span><span class="scene-check">✓</span></button>
+        </div>
+      </div>
+      <div id="image-tab" class="tab-content" role="tabpanel" aria-labelledby="image-label" hidden>
+        <label class="upload" id="drop-zone" tabindex="0"><input id="image-file" type="file" accept="image/png,image/jpeg,image/webp"><i data-icon="upload"></i><strong>画像を読み込む</strong><span>ドロップ、またはクリック</span><small>PNG / JPEG / WebP · 最大15MB</small></label>
+        <div class="image-details" id="image-details" hidden><span id="image-name"></span><button id="remove-image" class="text-button">削除</button></div>
+        <p class="helper">画像はこの端末内で処理されます。</p>
+      </div>
+      <div id="audio-tab" class="tab-content" role="tabpanel" aria-labelledby="audio-label" hidden>
+        <div class="audio-state"><span id="audio-dot" class="status-dot"></span><span id="audio-state">未接続</span></div>
+        <div class="audio-meter" aria-hidden="true"></div>
+        <button id="system-audio" class="secondary wide"><i data-icon="monitor"></i>PCの音声に接続</button>
+        <button id="mic-audio" class="text-button wide"><i data-icon="mic"></i>マイクを使用</button>
+        <button id="stop-audio" class="text-button wide" hidden>接続を解除</button>
+        <p class="helper">共有画面で「音声を共有」を選択してください。音声は送信・録音されません。</p>
+      </div>
+      <div class="divider"></div>
+      <div class="setting"><label for="size">ドットサイズ</label><output id="size-value" for="size">5 px</output><input id="size" type="range" min="3" max="12" step="1" value="5"></div>
+      <div class="setting"><label for="speed">アニメーション速度</label><output id="speed-value" for="speed">1.0 ×</output><input id="speed" type="range" min="0.2" max="2" step="0.1" value="1"></div>
+      <div class="setting"><label for="brightness">明るさ</label><output id="brightness-value" for="brightness">100 %</output><input id="brightness" type="range" min="0.2" max="1.5" step="0.05" value="1"></div>
+      <div class="color-setting"><span>アクセント</span><div class="swatches"><button class="swatch active" data-color="#c4cfb3" style="--swatch:#c4cfb3" aria-label="セージ" aria-pressed="true"></button><button class="swatch" data-color="#b7c9e2" style="--swatch:#b7c9e2" aria-label="ブルー" aria-pressed="false"></button><button class="swatch" data-color="#d1b5d4" style="--swatch:#d1b5d4" aria-label="ラベンダー" aria-pressed="false"></button><button class="swatch" data-color="#e6c099" style="--swatch:#e6c099" aria-label="アンバー" aria-pressed="false"></button><label class="custom-color" title="カスタムカラー"><input id="color" type="color" value="#c4cfb3" aria-label="カスタムカラー"><i data-icon="plus"></i></label></div></div>
+      <div class="divider"></div>
+      <button id="wallpaper" class="primary wide"><i data-icon="monitor"></i><span>全画面で表示</span><i data-icon="arrow"></i></button>
+      <div class="panel-foot"><span><span class="tiny-dot"></span>設定は自動保存</span><button id="reset" class="text-button">リセット</button></div>
+    </section>
+  </main>
+  <footer class="chrome"><div class="scene-meta"><span class="meta-index" id="meta-index">01</span><div><span class="eyebrow">SCENE</span><p id="scene-name">鯉の池<span>KOI POND</span></p></div></div><div class="playback glass"><button id="play" class="icon-button" aria-label="一時停止"><i data-icon="pause"></i></button><span class="playback-line"></span><span id="play-state"><span class="tiny-dot"></span>再生中</span><button id="fullscreen" class="icon-button" aria-label="全画面表示"><i data-icon="expand"></i></button></div><div class="runtime"><span id="fps">30</span> FPS<span class="runtime-divider">/</span><span>LOCAL RENDER</span></div></footer>
+  <button id="show" class="glass icon-button" aria-label="設定パネルを表示" hidden><i data-icon="sliders"></i></button>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="info-dialog" class="glass"><div class="dialog-head"><h2>DOTPOND</h2><button id="close-info" class="icon-button" aria-label="閉じる"><i data-icon="close"></i></button></div><p>ドットアニメーション壁紙 / 1.0.0</p><p>画像・音声は端末内で処理します。ログインは不要です。</p><p>ブラウザー版は全画面表示に対応。デスクトップへの常駐はWindowsアプリをご利用ください。</p><p>Space：再生 / 停止<br>F：全画面　H：設定を隠す<br>Esc：設定を表示</p><a id="download-link" href="https://github.com/ibk4407-beep/dotpond/releases/latest" target="_blank" rel="noopener">Windows アプリをダウンロード ↗</a></dialog>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

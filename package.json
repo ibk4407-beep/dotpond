@@ -1,0 +1,36 @@
+{
+  "name": "dotpond",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pixel animation wallpaper for Windows",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "dev": "node server.mjs",
+    "start": "electron .",
+    "package": "powershell -NoProfile -ExecutionPolicy Bypass -File desktop/build-host.ps1 && electron-builder --win portable",
+    "deploy": "wrangler pages deploy dist --project-name=dotpond"
+  },
+  "devDependencies": {
+    "electron": "45.1.0",
+    "electron-builder": "26.18.0",
+    "wrangler": "^4.0.0"
+  },
+  "build": {
+    "appId": "dev.dotpond.app",
+    "productName": "DOTPOND",
+    "files": [
+      "dist/**/*",
+      "desktop/*.cjs",
+      "package.json"
+    ],
+    "extraResources": [{"from":"desktop/WallpaperHost.exe","to":"WallpaperHost.exe"}],
+    "win": {
+      "target": "portable",
+      "artifactName": "DOTPOND-${version}-Windows.exe"
+    },
+    "directories": {
+      "output": "release"
+    }
+  }
+}
